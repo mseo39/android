@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -23,14 +24,23 @@ public class Guess_num extends AppCompatActivity {
     private TextView time_text; //time_text TextView를 저장할 변수 선언
     private CountDownTimer countDownTimer; //CountDownTimer를 저장할 변수 선언
 
+    //============== 문구 변경
+    TextView guess_text; //Textview 변수 선언 , 입력받은 값에 따라 문구를 바꾸는 위젯
+
     //============= 레이아웃 생성, 초기화 컴포넌트를 불러옴
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); //프로그램 Activity가 생성할 때 실행
         setContentView(R.layout.activity_main); //화면 디자인을 xml로 정의해놓은 파일을 불러와 지정
 
+        //============== nickname 액티비티로부터 온 데이터 받기
+        Intent intent = getIntent();
+        String text = intent.getStringExtra("name");
+
+
         //textView에서 id가 time_text인 것을 가져와서 저장함
         time_text = (TextView)findViewById(R.id.time_text);
+        //time_text.setText(name.toString());
         //Timer함수 호출
         Timer();
         //카운트다운 시작
@@ -43,13 +53,13 @@ public class Guess_num extends AppCompatActivity {
         countDownTimer = new CountDownTimer(30*1000, 1000) {
             //1초에 한번씩 실행됨(매개변수로 1000을 보냈기 때문)
             public void onTick(long millisUntilFinished) {
-                //time_text에 count로 지정_ 여기서 문자열로 바꾸지 않으면 오류가 발생한다. 유의하자
-                time_text.setText(String.valueOf(count));
                 //count 값을 1 줄이자
                 count --;
+                //time_text에 count로 지정_ 여기서 문자열로 바꾸지 않으면 오류가 발생한다. 유의하자
+                time_text.setText("Time: "+String.valueOf(count));
             }//마지막에 실행되는 메소드이다
             public void onFinish() {
-                time_text.setText(String.valueOf("Finish ."));
+                guess_text.setText(String.valueOf("GAME OVER"));
             }
         };
     }
@@ -72,7 +82,6 @@ public class Guess_num extends AppCompatActivity {
         EditText et; //editText 변수 선언, 사용자로 부터 입력 받는 위젯
         et = (EditText)findViewById(R.id.edit_num); //editText에서 id가 edit_num인 것을 찾아서 변수에 저장
 
-        TextView guess_text; //Textview 변수 선언 , 입력받은 값에 따라 문구를 바꾸는 위젯
         guess_text = (TextView)findViewById(R.id.guess_text); //textView에서 id가 guess_text인 것을 찾아서 변수에 저장
         
         //=====사용자의 입력값이 공백인지 검사
@@ -91,9 +100,9 @@ public class Guess_num extends AppCompatActivity {
                 guess_text.setText("정답입니다");
                 countDownTimer.cancel();
             }else if (num<random_num){ //random 숫자가 입력한 수보다 크면
-                guess_text.setText("UP");
+                guess_text.setText(">>      UP      <<");
             }else{
-                guess_text.setText("DOWN");
+                guess_text.setText(">>     DOWN     <<");
             }
         }
         
@@ -103,11 +112,11 @@ public class Guess_num extends AppCompatActivity {
         try_num=try_num-1;
         TextView try_text = (TextView)findViewById(R.id.try_text); //try_text변수를 선언하여 textView에서 id가 try_text인 것을 찾아서 변수에 저장
 
-        if (try_num<=0){ //만약 시도가 더이상 없다면
-            guess_text.setText("GAME OVER");//gameover
+        if (try_num<0){ //만약 시도가 더이상 없다면
+            guess_text.setText(">> GAME OVER <<");//gameover
             countDownTimer.cancel();
         }else {//시도 횟수가 남았다면
-            try_text.setText("기회: " + try_num); //시도 횟수로 텍스트 지정
+            try_text.setText("try: " + try_num); //시도 횟수로 텍스트 지정
         }
     }
 }

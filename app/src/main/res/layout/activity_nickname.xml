@@ -6,4 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".nickname">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="197dp"
+        android:layout_marginBottom="35dp"
+        android:fontFamily="casual"
+        android:text="Guess Game"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/emailEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/emailEdit"
+        android:layout_width="197dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:hint="email"
+        android:inputType="text"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="152dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="284dp"
+        android:onClick="startButton"
+        android:text="start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
 </androidx.constraintlayout.widget.ConstraintLayout>
