@@ -14,7 +14,8 @@ public class Guess_num extends AppCompatActivity {
     
     //============== 난수 발생
     Random random = new Random(); // 랜덤 객체 생성
-    private int random_num= random.nextInt(100)+1; //1~100 정수 중 랜덤으로 저장
+    private int random_num=10;
+    //random.nextInt(100)+1; //1~100 정수 중 랜덤으로 저장
 
     //============== 시도할 수 있는 기회
     private int try_num=5; //5로 초기화 //참고로 점수는 try_num*20이다
@@ -27,6 +28,10 @@ public class Guess_num extends AppCompatActivity {
     //============== 문구 변경
     TextView guess_text; //Textview 변수 선언 , 입력받은 값에 따라 문구를 바꾸는 위젯
 
+    //사용자이름이 저장될 변수 선언
+    String name_text;
+
+
     //============= 레이아웃 생성, 초기화 컴포넌트를 불러옴
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class Guess_num extends AppCompatActivity {
 
         //============== nickname 액티비티로부터 온 데이터 받기
         Intent intent = getIntent();
-        String text = intent.getStringExtra("name");
+        name_text = intent.getStringExtra("name");
 
 
         //textView에서 id가 time_text인 것을 가져와서 저장함
@@ -56,10 +61,17 @@ public class Guess_num extends AppCompatActivity {
                 //count 값을 1 줄이자
                 count --;
                 //time_text에 count로 지정_ 여기서 문자열로 바꾸지 않으면 오류가 발생한다. 유의하자
-                time_text.setText("Time: "+String.valueOf(count));
+                time_text.setText(String.valueOf(count));
             }//마지막에 실행되는 메소드이다
             public void onFinish() {
-                guess_text.setText(String.valueOf("GAME OVER"));
+
+                //guess_text.setText(String.valueOf("GAME OVER"));
+                //제한시간을 초과하였기 때문에 결과,플레이어의 닉네임, 남은 시간을 가지고 결과 페이지로 넘어감
+                Intent result_intent = new Intent(Guess_num.this, result.class);
+                result_intent.putExtra("result", "GAME OVER");
+                result_intent.putExtra("name", name_text);
+                result_intent.putExtra("time",time_text.getText().toString());
+                startActivity(result_intent);
             }
         };
     }
@@ -98,7 +110,15 @@ public class Guess_num extends AppCompatActivity {
 
             if (num == random_num) { //같다
                 guess_text.setText("정답입니다");
+                //시간을 멈춤
                 countDownTimer.cancel();
+                //==============  정답을 맞추었기 때문에 플레이어의 결과, 닉네임, 남은 시간을 가지고 결과 페이지로 넘어감
+                Intent result_intent = new Intent(Guess_num.this, result.class);
+                result_intent.putExtra("result", "Success");
+                result_intent.putExtra("name", name_text);
+                result_intent.putExtra("time",time_text.getText().toString());
+                startActivity(result_intent);
+                
             }else if (num<random_num){ //random 숫자가 입력한 수보다 크면
                 guess_text.setText(">>      UP      <<");
             }else{
@@ -115,8 +135,15 @@ public class Guess_num extends AppCompatActivity {
         if (try_num<0){ //만약 시도가 더이상 없다면
             guess_text.setText(">> GAME OVER <<");//gameover
             countDownTimer.cancel();
+
+            //시도횟수를 다 사용하였기 때문에 플레이어의 결과,닉네임, 남은 시간을 가지고 결과 페이지로 넘어감
+            Intent result_intent = new Intent(Guess_num.this, result.class);
+            result_intent.putExtra("result", "GAME OVER");
+            result_intent.putExtra("name", name_text);
+            result_intent.putExtra("time",time_text.getText().toString());
+            startActivity(result_intent);
         }else {//시도 횟수가 남았다면
-            try_text.setText("try: " + try_num); //시도 횟수로 텍스트 지정
+            try_text.setText(String.valueOf(try_num)); //시도 횟수로 텍스트 지정
         }
     }
 }
